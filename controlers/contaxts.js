@@ -1,14 +1,16 @@
-const constacts = require('../models/contacts');
+const { Contact } = require('../models/contact');
+
 const { HttpError, ctrlWrapper } = require('../helpers');
 
 const getAll = async (req, res, next) => {
-  const result = await constacts.listContacts();
+  const result = await Contact.find();
   res.json(result);
 };
 
 const getById = async (req, res, next) => {
-  const { contactId } = req.params;
-  const result = await constacts.getContactById(contactId);
+  const { Id } = req.params;
+  console.log(req.params);
+  const result = await Contact.findById(Id);
   if (!result) {
     throw HttpError(404, 'Not found');
   }
@@ -16,14 +18,14 @@ const getById = async (req, res, next) => {
 };
 
 const add = async (req, res) => {
-  const result = await constacts.addContact(req.body);
+  const result = await Contact.create(req.body);
 
   res.status(201).json(result);
 };
 
 const deleteById = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await constacts.removeContact(contactId);
+  const { Id } = req.params;
+  const result = await Contact.findOneAndRemove(Id);
   if (!result) {
     throw HttpError(404, 'Not found');
   }
@@ -31,10 +33,19 @@ const deleteById = async (req, res) => {
 };
 
 const ChageById = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await constacts.updateContact(contactId, req.body);
+  const { Id } = req.params;
+  const result = await Contact.findOneAndUpdate(Id, req.body, { new: true });
   if (!result) {
     throw HttpError(404, 'Not found');
+  }
+  res.json(result);
+};
+
+const ChageFavorite = async (req, res) => {
+  const { Id } = req.params;
+  const result = await Contact.findOneAndUpdate(Id, req.body, { new: true });
+  if (!result) {
+    throw HttpError(404, 'missing field favorite');
   }
   res.json(result);
 };
@@ -45,4 +56,5 @@ module.exports = {
   add: ctrlWrapper(add),
   deleteById: ctrlWrapper(deleteById),
   ChageById: ctrlWrapper(ChageById),
+  ChageFavorite: ctrlWrapper(ChageFavorite),
 };
