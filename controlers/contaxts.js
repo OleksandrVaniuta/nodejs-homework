@@ -4,12 +4,12 @@ const { HttpError, ctrlWrapper } = require('../helpers');
 
 const getAll = async (req, res, next) => {
   const result = await Contact.find();
+  console.log(req.params);
   res.json(result);
 };
 
 const getById = async (req, res, next) => {
   const { Id } = req.params;
-  console.log(req.params);
   const result = await Contact.findById(Id);
   if (!result) {
     throw HttpError(404, 'Not found');
@@ -34,7 +34,7 @@ const deleteById = async (req, res) => {
 
 const ChageById = async (req, res) => {
   const { Id } = req.params;
-  const result = await Contact.findOneAndUpdate(Id, req.body, { new: true });
+  const result = await Contact.findByIdAndUpdate(Id, req.body, { new: true });
   if (!result) {
     throw HttpError(404, 'Not found');
   }
@@ -43,7 +43,7 @@ const ChageById = async (req, res) => {
 
 const ChageFavorite = async (req, res) => {
   const { Id } = req.params;
-  const result = await Contact.findOneAndUpdate(Id, req.body, { new: true });
+  const result = await Contact.findByIdAndUpdate(Id, req.body, { new: true });
   if (!result) {
     throw HttpError(404, 'missing field favorite');
   }
