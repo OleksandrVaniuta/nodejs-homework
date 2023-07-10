@@ -3,8 +3,6 @@ const express = require('express');
 const router = express.Router();
 
 const ctrl = require('../../controlers/contaxts');
-
-// const { validateBody, isValideId } = require('../../midlewares/validates');
 const validateBody = require('../../midlewares/validates');
 const isValideId = require('../../midlewares/isValidate');
 
