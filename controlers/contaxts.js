@@ -6,10 +6,13 @@ const getAll = async (req, res, next) => {
   const { _id: owner } = req.user;
   const { page = 1, limit = 10, favorite = '' } = req.query;
   const skip = (page - 1) * limit;
-  const result = await Contact.find({ owner }, '', {
+  const filter = { owner };
+  if (favorite !== '') {
+    filter.favorite = favorite === 'true';
+  }
+  const result = await Contact.find(filter, '', {
     skip,
     limit,
-    favorite,
   }).populate('owner', 'email subscription');
   console.log(req.params);
   res.json(result);
